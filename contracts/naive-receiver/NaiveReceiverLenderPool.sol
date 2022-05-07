@@ -26,12 +26,12 @@ contract NaiveReceiverLenderPool is ReentrancyGuard {
 
         require(borrower.isContract(), "Borrower must be a deployed contract");
         // Transfer ETH and handle control to receiver
-        borrower.functionCallWithValue(
+        borrower.functionCallWithValue(//DAJEMO MU KONTROLU OVDE
             abi.encodeWithSignature(
                 "receiveEther(uint256)",
                 FIXED_FEE
             ),
-            borrowAmount
+            borrowAmount//OVO JE AMMOUNT KOJI TRANSFERAMO NA RACUN OD BORROWERA -> ONOLIKO KOLIKO JE POSUDIJA
         );
         
         require(
