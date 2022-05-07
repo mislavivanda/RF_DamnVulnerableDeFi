@@ -44,7 +44,7 @@ contract UnstoppableLender is ReentrancyGuard {
         //onda maknit ovi assert i u slucaju da je drukcije onda postavit poolBalance na ovu vrijednost?
         //ili sprijecit da nam neko transfera tokene van nase depostiTokens funkcije-> to ne mozemo jer on operira na smart contractu od tokena?
         //je li se pozove ista kad nam neko transfera token neki fallback jel se poziva? ako da onda tu odbit takve transkacije
-        
+        //MAKNIT SKROZ OVI POOL AMMOUNT I UVIK GLEDAT STANJE PRIJE TRANSFERA DIREKT S ADRESE OD TOKEN CONTRACTA
         damnValuableToken.transfer(msg.sender, borrowAmount);//DEFAULTNA ADRESA OD KOJEG SE UZIMA JE ADRESA UNSOTPABLELENDER SMART CONTRACTA JER CE TO BITI msg.sender u transfer funkciji od token smartcontracta
         
         IReceiver(msg.sender).receiveTokens(address(damnValuableToken), borrowAmount);
