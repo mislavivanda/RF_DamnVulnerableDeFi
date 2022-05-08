@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
  * @author Damn Vulnerable DeFi (https://damnvulnerabledefi.xyz)
  */
 contract FlashLoanReceiver {
-    using Address for address payable;
+    using Address for address payable;//mogucnost pizivanja Address utlity funkcija na tipivima podataka tipa address payable
 
     address payable private pool;
 

