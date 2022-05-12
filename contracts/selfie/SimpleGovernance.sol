@@ -16,8 +16,8 @@ contract SimpleGovernance {
         address receiver;
         bytes data;
         uint256 weiAmount;
-        uint256 proposedAt;
-        uint256 executedAt;
+        uint256 proposedAt;//kad je predlozena
+        uint256 executedAt;//prati je li executana ikako prije
     }
     
     DamnValuableTokenSnapshot public governanceToken;
@@ -29,7 +29,7 @@ contract SimpleGovernance {
     event ActionQueued(uint256 actionId, address indexed caller);
     event ActionExecuted(uint256 actionId, address indexed caller);
 
-    constructor(address governanceTokenAddress) {
+    constructor(address governanceTokenAddress) {//governance token je isto DVT token-> za dobit voting/action mogucnosti trebaju nam DVT tokeni
         require(governanceTokenAddress != address(0), "Governance token cannot be zero address");
         governanceToken = DamnValuableTokenSnapshot(governanceTokenAddress);
         actionCounter = 1;
@@ -37,17 +37,18 @@ contract SimpleGovernance {
     
     function queueAction(address receiver, bytes calldata data, uint256 weiAmount) external returns (uint256) {
         require(_hasEnoughVotes(msg.sender), "Not enough votes to propose an action");
-        require(receiver != address(this), "Cannot queue actions that affect Governance");
+        require(receiver != address(this), "Cannot queue actions that affect Governance");//ne mozemo pozivat funkcije na governance contractu
 
         uint256 actionId = actionCounter;
 
-        GovernanceAction storage actionToQueue = actions[actionId];
+    /*Memory and calldata mean the variable will only exist for the transaction, storage will be saved FOREVER */
+        GovernanceAction storage actionToQueue = actions[actionId];//pohrani u storage objekt tipa GovernanaceAction, actionToQueueu je referecna koja pokazuje na njega -> preko nje mijenjamo taj niz
         actionToQueue.receiver = receiver;
         actionToQueue.weiAmount = weiAmount;
         actionToQueue.data = data;
         actionToQueue.proposedAt = block.timestamp;
 
-        actionCounter++;
+        actionCounter++;//broji akcije
 
         emit ActionQueued(actionId, msg.sender);
         return actionId;
@@ -56,12 +57,12 @@ contract SimpleGovernance {
     function executeAction(uint256 actionId) external payable {
         require(_canBeExecuted(actionId), "Cannot execute this action");
         
-        GovernanceAction storage actionToExecute = actions[actionId];
+        GovernanceAction storage actionToExecute = actions[actionId];//
         actionToExecute.executedAt = block.timestamp;
 
-        actionToExecute.receiver.functionCallWithValue(
+        actionToExecute.receiver.functionCallWithValue(//pozovi akciju odnosno funkciju na kontraktu s recevier adresom i trasfneriraj weiAmount tokena
             actionToExecute.data,
-            actionToExecute.weiAmount
+            actionToExecute.weiAmount// transferring value wei to target
         );
 
         emit ActionExecuted(actionId, msg.sender);
@@ -84,7 +85,7 @@ contract SimpleGovernance {
         );
     }
     
-    function _hasEnoughVotes(address account) private view returns (bool) {
+    function _hasEnoughVotes(address account) private view returns (bool) {//ima pravo pozvat akciju ako imas vise od 50% ukupnih sredstava DVT tokena
         uint256 balance = governanceToken.getBalanceAtLastSnapshot(account);
         uint256 halfTotalSupply = governanceToken.getTotalSupplyAtLastSnapshot() / 2;
         return balance > halfTotalSupply;
