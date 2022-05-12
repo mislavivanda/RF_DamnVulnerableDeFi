@@ -26,7 +26,7 @@ contract TheRewarderPool {
 
     // Token used for internal accounting and snapshots
     // Pegged 1:1 with the liquidity token
-    AccountingToken public accToken;
+    AccountingToken public accToken;//ZA PRACENJE KOLIKO KO IMA SREDSTAVA-> 1DVT=1ACCOUNTING TOKEN
     
     // Token in which rewards are issued
     RewardToken public immutable rewardToken;
@@ -49,35 +49,38 @@ contract TheRewarderPool {
     function deposit(uint256 amountToDeposit) external {
         require(amountToDeposit > 0, "Must deposit tokens");
         
-        accToken.mint(msg.sender, amountToDeposit);
+        accToken.mint(msg.sender, amountToDeposit);/*accToken se minta prije nego se provjeri imamo li sredstava u require() ali svjd je jer ce se sve revertat ako pukne neki require */
         distributeRewards();
 
         require(
-            liquidityToken.transferFrom(msg.sender, address(this), amountToDeposit)
+            liquidityToken.transferFrom(msg.sender, address(this), amountToDeposit),"Puka deposit"
         );
     }
 
     function withdraw(uint256 amountToWithdraw) external {
-        accToken.burn(msg.sender, amountToWithdraw);
-        require(liquidityToken.transfer(msg.sender, amountToWithdraw));
+        accToken.burn(msg.sender, amountToWithdraw);/*WITHDRAWAJ BEZ PROVIZIJE SVOJA SREDSTVA*/
+        /*NEMA PROVJERE JEL IMA DOVOLJNO-> ako nema puknit ce transfer i revertat pa ce se sve ponistit */
+        require(liquidityToken.transfer(msg.sender, amountToWithdraw),"PUka withdraw");
     }
 
     function distributeRewards() public returns (uint256) {
         uint256 rewards = 0;
 
-        if(isNewRewardsRound()) {
+        if(isNewRewardsRound()) {/*SVAKO 5 DANA SE ISPLACUJU REWARDOVI -> KAD U POČETKU DEPOSITAJU SVI NEĆE SE ISPLATIT JER JE POČETNI SNAPSHOT UZET U TRENUTKU KRIERANJA CONTRACTA U CONSTRUCTORU-> IDUCA ISPLATA ĆE BITI 5 DANA NAKON KREIRANJA -> KAD SE PRVOME PODILI REWARD lastRecordedSnapshotTimestamp CE SE POSTAVIT NA NJEGA I CEKAT ĆE SE ONDA OPET OD TOG TRENUTKA 5 DANA */
             _recordSnapshot();
-        }        
+        }
+        //OVDE SE UVIK RADI DISTRIBUTE NEOVISNO JE LI PROSLO 5 DANA-> ZNACI LI TO DA CE SE UVIK ISPLATIT REWARD KAD SE POZOVE OVA FUNKCIJHA -> NE 
+        //-> lastRewardTimestamps[ADRESA] ĆE IMAT POHRANJEN TIMESTAMP KADA JE NETKO POVUKAO REWARDOVE -> MOZE IH POVUC SAMO JEDNOM U JEDNOJ RUNDI -> MOZE IH POVUC SAMO KAD MU TIMESTAMP NE UPADA U TRENUTNU RUNDU -> SPRIJECENO DUPLICIRANO POVLACENJE
         
         uint256 totalDeposits = accToken.totalSupplyAt(lastSnapshotIdForRewards);
         uint256 amountDeposited = accToken.balanceOfAt(msg.sender, lastSnapshotIdForRewards);
 
         if (amountDeposited > 0 && totalDeposits > 0) {
-            rewards = (amountDeposited * 100 * 10 ** 18) / totalDeposits;
+            rewards = (amountDeposited * 100 * 10 ** 18) / totalDeposits;//PO OVOJ LOGOCI CE ALICE,BOB,CHARLIE,DAVID DOBIT 100*100/400=25 REWARD TOKENA
 
             if(rewards > 0 && !_hasRetrievedReward(msg.sender)) {
                 rewardToken.mint(msg.sender, rewards);
-                lastRewardTimestamps[msg.sender] = block.timestamp;
+                lastRewardTimestamps[msg.sender] = block.timestamp;/*zapisi kad je koji user zadnje dobija rewardove */
             }
         }
 
@@ -85,7 +88,7 @@ contract TheRewarderPool {
     }
 
     function _recordSnapshot() private {
-        lastSnapshotIdForRewards = accToken.snapshot();
+        lastSnapshotIdForRewards = accToken.snapshot();/*ovi snapshot govori koliko je ko u trenutku zahtjeva imao tokena u poolu -> na ovi nacin ne moze on kad dode isplata depositat 100000 tokena koji ce mu uc u obracun nego mu u obtracun ulazu sta je ima dotad */
         lastRecordedSnapshotTimestamp = block.timestamp;
         roundNumber++;
     }
@@ -97,7 +100,7 @@ contract TheRewarderPool {
         );
     }
 
-    function isNewRewardsRound() public view returns (bool) {
+    function isNewRewardsRound() public view returns (bool) {/*AKO SMO USLI U INTERVAL NOVE RUNDE KOD POZIVA FUNKCIJE-> AZURIRAJ I POSTAVI NOVU RUNDU */
         return block.timestamp >= lastRecordedSnapshotTimestamp + REWARDS_ROUND_MIN_DURATION;
     }
 }
