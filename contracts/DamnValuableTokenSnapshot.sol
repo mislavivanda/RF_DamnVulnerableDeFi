@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
 contract DamnValuableTokenSnapshot is ERC20Snapshot {
     
     uint256 private lastSnapshotId;
-
+    //Kao i obicni DVT samo s mogucnosti dohvata Snapshota, minta sve odma i to na adresu kreatora
     constructor(uint256 initialSupply) ERC20("DamnValuableToken", "DVT") {
         _mint(msg.sender, initialSupply);
     }

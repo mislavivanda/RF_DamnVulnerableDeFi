@@ -18,7 +18,9 @@ describe('[Challenge] Unstoppable', function () {
 
         this.token = await DamnValuableTokenFactory.deploy();
         this.pool = await UnstoppableLenderFactory.deploy(this.token.address);
+        /*msg.sender SE DEFUALTNO POSTAVLJA NA PRVOG U NIZU SIGNERSA ODNOSNO NA DEPLOYERA U OVOM SLUCAJU */
 
+        
         //approve jer cemo koristit instancu od token contracta unutar pool contracta koja ce prebacivat tokene s adrese tokena na adresu poola
        //ZAŠTO APPROVAMO POOLU AKO NECE ON BIT TAJ KOJI CE POZIVAT TRANSAKCIJU , AL NIJE DA APPROVAMO ONOME KO CE U NAŠE IME TRASNFERIRAT NAŠE NOVCE 
        //JEL TO ZATO STA CE SE POZIVAT U DRUGOM CONTRACTU PA MORAMO TAKO IAKO JE TAMO INSTANCA this.token contracta?

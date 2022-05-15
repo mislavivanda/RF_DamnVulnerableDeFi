@@ -39,7 +39,7 @@ contract SelfiePool is ReentrancyGuard {
         msg.sender.functionCall(
             abi.encodeWithSignature(
                 "receiveTokens(address,uint256)",
-                address(token),
+                address(token),//adresa DVT tokena
                 borrowAmount
             )
         );
@@ -49,7 +49,7 @@ contract SelfiePool is ReentrancyGuard {
         require(balanceAfter >= balanceBefore, "Flash loan hasn't been paid back");
     }
 
-    function drainAllFunds(address receiver) external onlyGovernance {
+    function drainAllFunds(address receiver) external onlyGovernance {//samo governance contract moze pozivati
         uint256 amount = token.balanceOf(address(this));
         token.transfer(receiver, amount);
         

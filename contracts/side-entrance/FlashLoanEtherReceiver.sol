@@ -24,6 +24,7 @@ contract FlashLoanEtherReceiver {
     }
 
     function drainPool(address poolAddress,uint256 poolBalance) external {
+        require(msg.sender==owner,"Only owner can call this function");
         ILenderPool(poolAddress).flashLoan(poolBalance);
         ILenderPool(poolAddress).withdraw();
     }
