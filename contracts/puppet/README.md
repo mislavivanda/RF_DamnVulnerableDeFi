@@ -23,7 +23,7 @@ If we somehow manipulate the balance on the Uniswap contract then we can use tha
 After careful consideration we come to the realization that simple trading on the Uniswap pool will be enough to lower the price of DVT.
 
 ## Attack
-Because of the way liquidity pools work, lowering the price of DVT requires selling a portion of those tokens.
+Because of the way liquidity pools work, lowering the price of DVT requires selling a portion of those tokens. First, because of the way liquidity pools handle token incoming transfers, we must approve those tokens to the liquidity pool.
 
 ![Trading on Uniswap](../../images/puppet-attack.png)
 
