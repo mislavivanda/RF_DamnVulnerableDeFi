@@ -1,5 +1,5 @@
 # The rewarder
-# Description
+# Challenge description
  There's a pool offering rewards in tokens every 5 days for those who deposit their DVT tokens into it. Alice, Bob, Charlie and David have already deposited some DVT tokens, and have won their rewards! **You don't have any DVT tokens. But in the upcoming round, you must claim most rewards for yourself.**  
  Oh, by the way, rumours say a new pool has just landed on mainnet. Isn't it offering DVT tokens in flash loans? 
 # Contracts
@@ -15,11 +15,15 @@ There are **2** main parts which enable us to fullfill our goal:
 2) As mentioned before, `FlashLoanerPool.sol` pool is awesome and very generous so we can borrow very large amount of DVTs for free and upon receiving deposit them to `TheRewarderPool.sol` contract which will mint us our reward. After claiming reward we can withdraw our DVTs and payback our flash loan. So we started with nothing and finished with largest reward in current reward round. Pretty cool!
 # Attack
 Since we need to interact with both `FlashLoanerPool.sol` and `TheRewarderPool.sol` contracts we need to define interfaces for their methods through which we will interact:
+
 ![Contract Interfaces](../../images/rewarder/rewarder-img-1.PNG)
+
 After initializing all our dependencies inside `constructor()` call we proceed and define our 2 methods:
-1) ![receiveRewardTokens() method](../../images/rewarder/rewarder-img-2.PNG)
+   ![receiveRewardTokens() method](../../images/rewarder/rewarder-img-2.PNG)
+   
     Structure of this function must match with the structure specified inside `FlashLoanerPool.sol`  `functionCall()` method. This method is starting point of our attack so it must ensure only owner of the contract can invoke it. Through calling `FlashLoanerPool.sol`  `flashLoan()` method it delegates control to our `receiveFlashLoan()` method
-2) ![receiveFlashLoan() method](../../images/rewarder/rewarder-img-3.PNG)
+   ![receiveFlashLoan() method](../../images/rewarder/rewarder-img-3.PNG)
+   
     After receiving loaned DVT tokens our goal is to deposit them into `TheRewarderPool.sol` via `deposit()` function to claim our reward and `withdraw()` them  to satisfy `FlashLoanerPool.sol` `require()` condition. We can easily notice these steps inside then method in previously given order, but with added `approve()` function call on DVT token at the beggining. Since our DVT tokens are transferred into `TheRewarderPool.sol` inside its `deposit()` function spender of our DVT tokens is not our contract which holds these DVTs, but the `TheRewarderPool.sol` contract so we first need to approve it to him in order to transfer our DVTs into pool succesfully.
     >**Note**: This is part of ERC20 standard specified inside **OpenZeppelin** [`IERC20`](https://docs.openzeppelin.com/contracts/3.x/api/token/erc20#IERC20) interface.
     
