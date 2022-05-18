@@ -19,9 +19,11 @@ Since we need to interact with both `FlashLoanerPool.sol` and `TheRewarderPool.s
 ![Contract Interfaces](../../images/rewarder/rewarder-img-1.PNG)
 
 After initializing all our dependencies inside `constructor()` call we proceed and define our 2 methods:
+
 ![receiveRewardTokens() method](../../images/rewarder/rewarder-img-2.PNG)
    
 Structure of this function must match with the structure specified inside `FlashLoanerPool.sol`  `functionCall()` method. This method is starting point of our attack so it must ensure only owner of the contract can invoke it. Through calling `FlashLoanerPool.sol`  `flashLoan()` method it delegates control to our `receiveFlashLoan()` method:
+
 ![receiveFlashLoan() method](../../images/rewarder/rewarder-img-3.PNG)
    
 After receiving loaned DVT tokens our goal is to deposit them into `TheRewarderPool.sol` via `deposit()` function to claim our reward and `withdraw()` them  to satisfy `FlashLoanerPool.sol` `require()` condition. We can easily notice these steps inside then method in previously given order, but with added `approve()` function call on DVT token at the beggining. Since our DVT tokens are transferred into `TheRewarderPool.sol` inside its `deposit()` function spender of our DVT tokens is not our contract which holds these DVTs, but the `TheRewarderPool.sol` contract so we first need to approve it to him in order to transfer our DVTs into pool succesfully.
