@@ -53,14 +53,14 @@ contract TheRewarderPool {
         distributeRewards();
 
         require(
-            liquidityToken.transferFrom(msg.sender, address(this), amountToDeposit),"Puka deposit"
+            liquidityToken.transferFrom(msg.sender, address(this), amountToDeposit)
         );
     }
 
     function withdraw(uint256 amountToWithdraw) external {
         accToken.burn(msg.sender, amountToWithdraw);/*WITHDRAWAJ BEZ PROVIZIJE SVOJA SREDSTVA*/
         /*NEMA PROVJERE JEL IMA DOVOLJNO-> ako nema puknit ce transfer i revertat pa ce se sve ponistit */
-        require(liquidityToken.transfer(msg.sender, amountToWithdraw),"PUka withdraw");
+        require(liquidityToken.transfer(msg.sender, amountToWithdraw));
     }
 
     function distributeRewards() public returns (uint256) {

