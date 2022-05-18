@@ -17,7 +17,7 @@ We have been given two (2) contracts in the `contracts/free-rider` repo. `FreeRi
 
 ![FreeRiderBuyer contract](../../images/free-rider-Marketplace.png)
 
-The contract has two parts:
+The `Marketplace` contract has two parts:
 * Offering for sale
 * Buying listed items
 
