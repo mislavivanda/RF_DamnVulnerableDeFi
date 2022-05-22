@@ -61,12 +61,7 @@ describe('[Challenge] Unstoppable', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */
-        //ne smimo dat da executa flash loanove -> assert(poolBalance == balanceBefore);
-        //poolBalance se postavi samo kod jednog poziva depositTokens
-        //posaljemo preko contracta od tokena ovom contractu dodatni token/tokene s naseg accounta i onda ce mu se azurirat balance i nece bit isti kao kod poziva depositTokens
-        //kad bzde radija damnValuableToken.balanceOf(address(this)) dobit ce veci broj od početnog amounta koji je postavljen kod receiveTokens
         await this.token.connect(attacker).transfer(this.pool.address,INITIAL_ATTACKER_TOKEN_BALANCE)
-        //POVEŽI SE NA ATTACKER TAKO DA OD NJEGA IDE TREANAKSCIJA PREMA POOLU -> FROM=ATTACKER, TO:POOL, NE MOŽEMO KORISTIT SINTAKUS SA {from:}, https://github.com/ethers-io/ethers.js/issues/1449
     });
 
     after(async function () {
