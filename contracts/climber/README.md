@@ -10,6 +10,7 @@ On the vault there's an additional role with powers to sweep all tokens in case 
 On the timelock, only an account with a "Proposer" role can schedule actions that can be executed 1 hour later.
 
 Your goal is to empty the vault. 
+
 ## Contracts
 On the `ClimberVault` contract there is an `initialize` function that will be called first and only once. Since we are using an upgradeable contract, we cannot use a constructor because if we deploy a contract behind a proxy it is completely oblivious to the [constructor](https://docs.openzeppelin.com/upgrades-plugins/1.x/proxies#the-constructor-caveat). 
 
@@ -47,7 +48,6 @@ We notice on the execute function, beyond the various checks on it there is a ch
 The main vulnerability on these contracts is that the check for valid function calls is executed after the calls. Our plan is to execute a bunch of operations, one of which is setting those operations as `ReadyForExecution`. Then the checks that perform after the call will be valid.
 
 ## Attack
-
 We've detected the main weekness on the Timelock contract. Now it's just about listing the things we have to execute to drain the funds off of the Vault.
 
 1. Update the delay to zero (0).
