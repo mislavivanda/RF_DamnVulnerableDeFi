@@ -14,24 +14,31 @@ Your goal is to empty the vault.
 On the `ClimberVault` contract there is an `initialize` function that will be called first and only once. Since we are using an upgradeable contract, we cannot use a constructor because if we deploy a contract behind a proxy it is completely oblivious to the [constructor](https://docs.openzeppelin.com/upgrades-plugins/1.x/proxies#the-constructor-caveat). 
 
 In the Vault we initialize some state variables and transfer the Vault ownership to a new contract, the `ClimberTimelock` contract.
+
 ![Vault - initializer](../../images/climber-vault-initializer.png)
 
 There is a function in the contract that looks very tempting to us since its' the function you would invoke to sweep all funds from the contract. Unfortunately, its' invoking is restricted to the `Sweeper` role. It would be nice to get it.
+
 ![Vault - onlySweeper](../../images/climber-vault-sweeper.png)
 
 And because this contract is upgradeable, meaning it is called behind a [proxy](https://docs.openzeppelin.com/contracts/4.x/api/proxy). This contract can only be upgraded by the owner, which is the `Timelock` contract.
+
 ![Vault - upgrading](../../images/climber-vault-upgrade.png)
 
 The `ClimberTimelock` contract which is deployed by the `Vault` contract and is its' owner consists of several parts. In the constructor there is a role managment system initialized. Also, something to note: the contract itself is its' own admin!
+
 ![Timelock - constructor](../../images/climber-timelock-constructor.png)
 
 Every operation to be executed by this contract first has to be scheduled on the contract and then a certain amount of time has to pass before it's executed. There is a lucrative function on the contract to change the delay.
+
 ![Timelock - updateDelay](../../images/climber-timelock-updateDelay.png)
 
 There is a `schedule` function where we schedule operations to be executed (only by the `PROPOSER_ROLE`)...
+
 ![Timelock - schedule](../../images/climber-timelock-schedule.png)
 
-... by calling the `execute` function.
+by calling the `execute` function.
+
 ![Timelock - execute](../../images/climber-timelock-execute.png)
 
 ## Vulnerability
@@ -49,6 +56,7 @@ We've detected the main weekness on the Timelock contract. Now it's just about l
 4. Schedule these actions with the `schedule` so the last check on `execute` passes.
 
 We define these function calls on our own contract we've named `ClimberAttack`.
+
 ![Timelock - attack](../../images/climber-attack.png)¸
 
 There are two things to note:
@@ -60,9 +68,11 @@ There are two things to note:
 Once we have full ownership of the Vault contract we still can't sweep funds because we don't have a `SWEEPER_ROLE`. Our only way to sweep the funds is to change the very way the Vault contract works! 
 
 That can be done by upgrading the contract. 
+
 ![Timelock - attack upgrade](../../images/climber-upgradeProxy.png)
 
 Since we are the owners we can do that. We write the new contract to easily sweep funds. 
+
 ![Timelock - attack upgrade](../../images/climber-upgrade.png)
 
 One function call (`sweepFunds`) and we have it!
