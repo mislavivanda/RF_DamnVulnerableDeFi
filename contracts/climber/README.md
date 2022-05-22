@@ -71,7 +71,7 @@ That can be done by upgrading the contract.
 
 ![Timelock - attack upgrade](../../images/climber-upgradeProxy.png)
 
-Since we are the owners we can do that. We write the new contract to easily sweep funds. 
+Since we are the owners we can do that. We write the new contract to easily sweep funds. Our upgrade contract has to follow various storage compatibility patterns so it can work properly and ultimately be upgraded.
 
 ![Timelock - attack upgrade](../../images/climber-upgrade.png)
 
