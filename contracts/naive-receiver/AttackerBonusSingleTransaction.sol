@@ -2,8 +2,6 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-
 interface ILenderPool {
     function flashLoan(address borrower, uint256 borrowAmount) external;
 }
