@@ -1,9 +1,9 @@
 ![](cover.png)
 
 # Table of contents
-## [Introduction](#Introduction)
-## [Closing words](#Closing-words)
-## [Credits](#Credits)
+## [Introduction](##Introduction)
+## [Closing words](##Closing-words)
+## [Credits](##Credits)
 ## Challenges README
 - ### [Unstoppable](../../blob/latest-version-branch/contracts/unstoppable/README.md)
 - ### [Naive receiver](../../blob/latest-version-branch/contracts/naive-receiver/README.md)
