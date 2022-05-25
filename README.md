@@ -34,7 +34,7 @@ In our case we will talk about [**Damn Vulnerable DeFi**](https://www.damnvulner
 
 Main goal of this project is to share our knowledge which we have obtained as part of solving [**Damn Vulnerable DeFi**](https://www.damnvulnerabledefi.xyz/) challenges which can serve as a nice tool to enhance your comprehension of various DeFi concepts and Solidity language. 
 
-JavaScript testing code solutions and added smart contracts code(if required by challenge) are given for every challenge along with README file with in depth explanation of contract functionality, vulnerability, attack strategy and corresponding DeFi and Solidity language concepts which are featured in observed challenge. README files can be referenced from Challenges README section inside [**Table of Contents**](#Table-of-Contents).
+JavaScript testing code solutions and added smart contracts code(if required by challenge) are given for every challenge along with README file with in depth explanation of contract functionality, vulnerability, attack strategy and corresponding DeFi and Solidity language concepts which are featured in observed challenge. README files can be referenced from **Challenges README** section inside [**Table of Contents**](#Table-of-Contents).
 
 >**Note**: We recommend that you always first try to solve the challenge by yourself and if you have difficulties cast an eye on our README's. Some challenges require more time to dive into and grasp their concepts so don't droop down if it takes a lot of time and you still didn't solve the challenge.
 
