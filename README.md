@@ -5,18 +5,18 @@
 - [**Closing words**](#Closing-words)
 - [**Credits**](#Credits)
 - **Challenges README**
-  - ### [Unstoppable](../../blob/latest-version-branch/contracts/unstoppable/README.md)
-  - ### [Naive receiver](../../blob/latest-version-branch/contracts/naive-receiver/README.md)
-  - ### [Truster](../../blob/latest-version-branch/contracts/truster/README.md)
-  - ### [Side entrance](../../blob/latest-version-branch/contracts/side-entrance/README.md)
-  - ### [The rewarder](../../blob/latest-version-branch/contracts/the-rewarder/README.md)
-  - ### [Selfie](../../blob/latest-version-branch/contracts/selfie/README.md)
-  - ### [Compromised](../../blob/latest-version-branch/contracts/compromised/README.md)
-  - ### [Puppet](../../blob/latest-version-branch/contracts/puppet/README.md)
-  - ### [Puppet v2](../../blob/latest-version-branch/contracts/puppet-v2/README.md)
-  - ### [Free rider](../../blob/latest-version-branch/contracts/free-rider/README.md)
-  - ### [Backdoor](../../blob/latest-version-branch/contracts/backdoor/README.md)
-  - ### [Climber](../../blob/latest-version-branch/contracts/climber/README.md)
+  - [**Unstoppable**](../../blob/latest-version-branch/contracts/unstoppable/README.md)
+  - [**Naive receiver**](../../blob/latest-version-branch/contracts/naive-receiver/README.md)
+  - [**Truster**](../../blob/latest-version-branch/contracts/truster/README.md)
+  - [**Side entrance**](../../blob/latest-version-branch/contracts/side-entrance/README.md)
+  - [**The rewarder**](../../blob/latest-version-branch/contracts/the-rewarder/README.md)
+  - [**Selfie**](../../blob/latest-version-branch/contracts/selfie/README.md)
+  - [**Compromised**](../../blob/latest-version-branch/contracts/compromised/README.md)
+  - [**Puppet**](../../blob/latest-version-branch/contracts/puppet/README.md)
+  - [**Puppet v2**](../../blob/latest-version-branch/contracts/puppet-v2/README.md)
+  - [**Free rider**](../../blob/latest-version-branch/contracts/free-rider/README.md)
+  - [**Backdoor**](../../blob/latest-version-branch/contracts/backdoor/README.md)
+  - [**Climber**](../../blob/latest-version-branch/contracts/climber/README.md)
 # Introduction
 Since Bitcoin's initial release in 2009, a new paradigm of decentralization has started to incorporate in many fields as an alternative to previous traditional - centralized systems. Bitcoin was the pioneer of decentralization, but it also only supported decentralized money/cryptocurrency transfers with no other functionality.
 
@@ -34,7 +34,7 @@ In our case we will talk about [**Damn Vulnerable DeFi**](https://www.damnvulner
 
 Main goal of this project is to share our knowledge which we have obtained as part of solving [**Damn Vulnerable DeFi**](https://www.damnvulnerabledefi.xyz/) challenges which can serve as a nice tool to enhance your comprehension of various DeFi concepts and Solidity language. 
 
-JavaScript testing code solutions and added smart contracts code(if required by challenge) are given for every challenge along with README file with in depth explanation of contract functionality, vulnerability, attack strategy and corresponding DeFi and Solidity language concepts which are featured in observed challenge. README files can be referenced from [**table of contents**](##Challenges-README).
+JavaScript testing code solutions and added smart contracts code(if required by challenge) are given for every challenge along with README file with in depth explanation of contract functionality, vulnerability, attack strategy and corresponding DeFi and Solidity language concepts which are featured in observed challenge. README files can be referenced from [**table of contents**](Challenges-README).
 
 >**Note**: We recommend that you always first try to solve the challenge by yourself and if you have difficulties cast an eye on our README's. Some challenges require more time to dive into and grasp their concepts so don't droop down if it takes a lot of time and you still didn't solve the challenge.
 
