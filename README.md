@@ -5,7 +5,7 @@
 ## [Closing words](#Closing-words)
 ## [Credits](#Credits)
 ## Challenges README
-- ### [Unstoppable](../../contracts/unstoppable/README.md)
+- ### [Unstoppable](../../blob/latest-version-branch/contracts/unstoppable/README.md)
 - ### [Naive receiver](../../contracts/naive-receiver/README.md)
 - ### [Truster](../../contracts/truster/README.md)
 - ### [Side entrance](../../contracts/side-entrance/README.md)
@@ -49,6 +49,6 @@ Many thanks to author [**@tinchoabbate**](https://twitter.com/tinchoabbate) for 
 
 Visit [**damnvulnerabledefi.xyz**](https://damnvulnerabledefi.xyz) official page.
 ## Challenge solutions authors:
-### **Challenges #1 - #6**: [**@mislavivanda**](https://github.com/mislavivanda)
+### **Challenges #1 - #6**:  [**@mislavivanda**](https://github.com/mislavivanda)
 
 ### **Challenges #7 - #12**: [**@matejdrazic**](https://github.com/matejdrazic)
