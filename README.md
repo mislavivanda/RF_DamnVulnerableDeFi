@@ -6,17 +6,17 @@
 ## [Credits](#Credits)
 ## Challenges README
 - ### [Unstoppable](../../blob/latest-version-branch/contracts/unstoppable/README.md)
-- ### [Naive receiver](../../contracts/naive-receiver/README.md)
-- ### [Truster](../../contracts/truster/README.md)
-- ### [Side entrance](../../contracts/side-entrance/README.md)
-- ### [The rewarder](../../contracts/the-rewarder/README.md)
-- ### [Selfie](../../contracts/selfie/README.md)
-- ### [Compromised](../../contracts/compromised/README.md)
-- ### [Puppet](../../contracts/puppet/README.md)
-- ### [Puppet v2](../../contracts/puppet-v2/README.md)
-- ### [Free rider](../../contracts/free-rider/README.md)
-- ### [Backdoor](../../contracts/backdoor/README.md)
-- ### [Climber](../../contracts/climber/README.md)
+- ### [Naive receiver](../../blob/latest-version-branch/contracts/naive-receiver/README.md)
+- ### [Truster](../../blob/latest-version-branch/contracts/truster/README.md)
+- ### [Side entrance](../../blob/latest-version-branch/contracts/side-entrance/README.md)
+- ### [The rewarder](../../blob/latest-version-branch/contracts/the-rewarder/README.md)
+- ### [Selfie](../../blob/latest-version-branch/contracts/selfie/README.md)
+- ### [Compromised](../../blob/latest-version-branch/contracts/compromised/README.md)
+- ### [Puppet](../../blob/latest-version-branch/contracts/puppet/README.md)
+- ### [Puppet v2](../../blob/latest-version-branch/contracts/puppet-v2/README.md)
+- ### [Free rider](../../blob/latest-version-branch/contracts/free-rider/README.md)
+- ### [Backdoor](../../blob/latest-version-branch/contracts/backdoor/README.md)
+- ### [Climber](../../blob/latest-version-branch/contracts/climber/README.md)
 # Introduction
 Since Bitcoin's initial release in 2009, a new paradigm of decentralization has started to incorporate in many fields as an alternative to previous traditional - centralized systems. Bitcoin was the pioneer of decentralization, but it also only supported decentralized money/cryptocurrency transfers with no other functionality.
 
