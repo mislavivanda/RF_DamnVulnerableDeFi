@@ -1,4 +1,4 @@
-# Compromised
+# Backdoor
 
 ## Challenge description
 To incentivize the creation of more secure wallets in their team, someone has deployed a registry of Gnosis Safe wallets. When someone in the team deploys and registers a wallet, they will earn 10 DVT tokens.
