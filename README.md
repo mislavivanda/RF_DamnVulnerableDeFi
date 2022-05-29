@@ -39,7 +39,7 @@ JavaScript testing code solutions and added smart contracts code(if required by 
 >**Note**: We recommend that you always first try to solve the challenge by yourself and if you have difficulties cast an eye on our README's. Some challenges require more time to dive into and grasp their concepts so don't droop down if it takes a lot of time and you still didn't solve the challenge.
 
 # Closing words
-We can freely say that we are living in an exciting and historical moment in which we witness some of the most revolutionary concepts developed in human history. We have seen how smart contracts which seem perfectly secure at first glance in fact feature security flaws which could result in catastrophic consequences such as mentioned draining lending pool funds, [NAVEDI OVDE JOS 2 PRIMJERA IZ SVOJIH CHALLENGEA]. These challenges emphasize the role of security in smart contract development and justify the existance of professional smart contract audit services.
+We can freely say that we are living in an exciting and historical moment in which we witness some of the most revolutionary concepts developed in human history. We have seen how smart contracts which seem perfectly secure at first glance in fact feature security flaws which could result in catastrophic consequences such as mentioned draining lending pool funds, using on-chain oracles to our benefit and taking control over entire contracts just because of a line of code poorly placed. These challenges emphasize the role of security in smart contract development and justify the existance of professional smart contract audit services.
 
 We hope that our project helped you to resolve all challenges and get into exiciting DeFi world full of opportunities.
 
