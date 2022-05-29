@@ -60,4 +60,5 @@ contract RegistryAttack {
             IERC20(dvt).transferFrom(address(proxy), msg.sender, amount);
         }
     }
+    
 }
