@@ -58,6 +58,6 @@ The UniswapV2 contract will call our `uniswapV2Call()` function as a callback an
 
 Then we transfer them to the `FreeRiderBuyer` contract. Next we receive the payout as is written in the contract. Our `after()`
 conditions are met :)
-## TLDR
+## Summary
 We've successfully 'stolen' all NFTs on the marketplace because of faulty order of code written on it. It first transferred ownership and then transferred the funds to the __NEW__ owner.
 

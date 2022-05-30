@@ -1,10 +1,10 @@
 # Unstoppable
-# Description
+## Challenge description
  There's a lending pool with a million DVT tokens in balance, offering flash loans for free. 
  If only there was a way to attack and **stop the pool from offering flash loans** ...
  
  You start with 100 DVT tokens in balance. 
-# Contracts
+## Contracts
 - `ReceiverUnstoppable.sol`: contract which enables its owner to request flash loan from `UnstoppableLender.sol` contract by calling `executeFlashLoan()` method. As part of flash loan concept, it also has `receiveTokens()` method which is invoked by loaner contract after borrowed tokens are received.
 
     >**Note**: Flash loan is a new DeFi concept brought by smart contracts which enables users with deployed smart contracts to borrow requested amount of token/cryptocurrency without guaranteeing by some collateral(e.g. mortgage in classic loans). Users can use these assets to perform certain actions which they encode in their smart contract function called by flash loan contract after borrowed assets are transferred. Users aim is to generate amount which is greater than the borrowed one. After users method is invoked, flash loan checks if borrowed ammount(+ fee if specified) is repaid - if that is not the case than all changes made inside transaction will be reverted.
@@ -22,7 +22,7 @@
     >
     > - **ERC20** `transferFrom()`: same as previously mentioned `transfer()` method, this method is also part of ERC20 standard. Difference compared to `transfer()` method is in number of parameters which are listed [**here**](https://docs.openzeppelin.com/contracts/2.x/api/token/erc20#ERC20-transferFrom-address-address-uint256-). In this case we need to set token spender address which is the address of contract/EOA that is spending **our tokens on our behalf**. In order for someone to spend certain amount of our tokens on our behalf, just like in real world, we first need to approve him to execute this action. This is the role of `approve()` [**method**](https://docs.openzeppelin.com/contracts/2.x/api/token/erc20#ERC20-approve-address-uint256-) which is also part of ERC20 standard and must be invoked before `transferFrom()` method. We conclude that main difference between ERC20 `tansfer()` and `transferFrom()` method is that in case of `transfer()` method we include 2 parties - `sender` who sends `amount` of tokens to `receiver`, and in `transferFrom()` we include 3 parties - `owner` of tokens who approves `spender` to spend `amount` of tokens on his behalf which he can send to any number of `receiver` addresses until total spent amount is less than approved `amount`.
 
-# Vulnerability
+## Vulnerability
 In order to prevent pool from offering flash loans we conclude that we need to examine `flashLoan()` method to determine contract vulnerability. 
 
 Stopping pool from offering flash loans suggests that we target conditions inside `flashLoan()` method which must be satisfied for its successful execution. These conditions are specified with Solditiy's `require()` and `assert()` methods(more about their difference [**here**](https://codeforgeek.com/assert-vs-require-in-solidity/)). 
@@ -32,7 +32,7 @@ Stopping pool from offering flash loans suggests that we target conditions insid
 Because contract updates `poolBalance` variable only when it receives tokens via `depositTokens()` method it anticipates that users will follow this implicited protocol and only deposit tokens in pool using this method. 
 
 We are not ordinary users, so if we deposit tokens to pool directly using ERC20 `transfer()` method we will bypass anticipated protocol and cause discrepancy between `poolBalance` and `balanceBefore`, thus stop pool from offering flash loans.
-# Attack
+## Attack
 By explaining contract vulnerability in [**previous chapter**](#Vulnerability) we pretty much described our attack procedure. Attack is pretty simple and requires single transaction. 
 
 It consists of transferring arbitrary amount of DVTs to `UnstoppableLender.sol` address via ERC20 `transfer()` method. We can perform this attack because we have 100 DVTs in balance. JavaScript attack code is:
@@ -40,6 +40,6 @@ It consists of transferring arbitrary amount of DVTs to `UnstoppableLender.sol` 
 ![JavaScript attack code](../../images/unstoppable/unstoppable.PNG)
 
 >**Note**: Notice we first needed to `connect()` to attacker address because `ethers.js` default `msg.sender` value is address of first member of destructured array returned by `ethers.getSigners()` which is in our case `deployer` address. Also, since token amount can be arbitrary we decided to transfer our whole balance amount.
-# Summary
+## Summary
 - Bypass deposit protocol anticipated by `UnstoppableLender.sol` contract by depositing arbitrary amount of DVTs into its pool using ERC20 `transfer()` method
 - Previous transfer caused discrepancy between `poolBalance` and `balanceBefore` variables which prevents pool from offering flash loans in future

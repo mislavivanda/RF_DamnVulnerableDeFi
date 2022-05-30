@@ -37,5 +37,5 @@ Next we simply call the borrow() function with the correct parameters. We reques
 
 This transaction passes and our __after()__ conditions are met. We've drained the pool!
 
-## TLDR
+## Summary
 Using the vulnerability of on-chain price calculation we've successfully drained a pool filled with DVTs!

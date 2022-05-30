@@ -77,7 +77,7 @@ Since we are the owners we can do that. We write the new contract to easily swee
 
 One function call (`sweepFunds`) and we have it!
 
-## TLDR
+## Summary
 By detecting a vulnerability in the `ClimberTimelock` contract we are able to upgrade the `ClimberVault` to something a little bit more to our own liking, something suitable for draining the entire vault.
 
 

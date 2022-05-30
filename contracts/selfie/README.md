@@ -1,5 +1,5 @@
 # Selfie
-# Description
+## Challenge description
 A new cool lending pool has launched! It's now offering flash loans of DVT tokens.
 
 Wow, and it even includes a really fancy governance mechanism to control it.
@@ -7,7 +7,7 @@ Wow, and it even includes a really fancy governance mechanism to control it.
 What could go wrong, right ?
 
 You start with no DVT tokens in balance, and the pool has 1.5 million. Your objective: **take them all**.
-# Contracts
+## Contracts
 - `SelfiePool.sol`: contract which offers flash loans through its `flashLoan()` method. Procedure is similar as in previous attacks. Contract which invokes `flashLoan()` method must implement `receiveTokens()` method following signature specified inside `abi.encodeWithSignature()` which specifies DVT token address as first parameter and borrowed amount as second parameter. Borrower contract method is invoked by `functionCall()` method provided by **OpenZeppelin's** [**`Address`**](https://docs.openzeppelin.com/contracts/3.x/api/utils#Address-functionCall-address-bytes-) utility. 
 
     Significant difference compared to previous flash loan contracts is in `drainAllFunds()` method. As you can guess from its name, this method enables withdrawal of all funds from the lending pool. Usually we should expect that this method could be invoked only by contract owner, but in this case `onlyGovernance` modifier specifies that `drainAllFunds()` method can be invoked only by the `SimpleGovernance.sol` contract. Also, receiver doesn't need to be `msg.sender` address(or in this case `SimpleGovernance.sol`), but it can be any address specified by `receiver` parameter value.
@@ -24,7 +24,7 @@ You start with no DVT tokens in balance, and the pool has 1.5 million. Your obje
     In order to execute proposed action we need to satisfy conditions specified in `_canBeExecuted()` method i.e. method can't be executed before(`executedAt` property records this) and at least 2 days must pass between action proposal and execution.
 
 - `DrainSelfiePool.sol`: attacker contract with 3 specified methods. Details about these methods will be covered in [**Attack**](#Attack) chapter.
-# Vulnerability
+## Vulnerability
 As we previously mentioned in [**The rewarder**](../../contracts/the-rewarder/README.md) challenge, token `snapshot` mechanism is used inside DAOs in order to prevent vote manipulation.
 
 We mentioned prevention method which uses token balances from X blocks ago(from the time the voting is proposed) to determine voting power of participants instead of using balances at the time of voting proposal. 
@@ -36,7 +36,7 @@ This contract has `snapshot()` method which is wrapper for ERC20 `_snapshot()` m
 By using balances at most recent token `snapshot`, while also anyone can perform token `snapshot`, we have same problem with vote manipulation as specified in [**The rewarder**](../../contracts/the-rewarder/README.md) challenge with only difference that in our case we talk about action proposal and not voting. Thus, if attacker can obtain enough DVTs before action proposal he can successfully propose an action. 
 
 Well, at least we are safe in our case since attacker doesn't have any DVTs in balance. ***Are we?*** Checkout it out in [**Attack**](#Attack) chapter.
-# Attack
+## Attack
 As previously discussed in [**Vulnerability**](#Vulnerability) chapter, DAO governance specified by `SimpleGovernance.sol` contract has a serious flaw in sense of vote manipulations if attacker can obtain enough voting power = `governanceToken` = DVT. 
 
 *But how can we obtain 1 million +1 DVT tokens in our case, starting with 0 DVT?* 
@@ -66,7 +66,7 @@ After succesfull action proposal we store returned `actionId` in `governanceActi
 Since we need to wait at least 2 days from action proposal to its execution we can not perform our attack inside single transaction. Thus, we define `drainPool()` method on our contract with only purpose to invoke `executeAction()` method with `actionId` prameter set to `governanceActionId` which will then perform our previously proposed action which results in 1.5 million DVTs on our balance:
 
 ![drainPool() method](../../images/selfie/selfie3.PNG)
-# Summary
+## Summary
 - Deploy contract
 - Inside **first** transaction:
     - Request flash loan of `TOKEN_INITIAL_SUPPLY/2+1` DVTs

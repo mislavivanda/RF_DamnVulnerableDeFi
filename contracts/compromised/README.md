@@ -76,5 +76,5 @@ At the end, since in the after clause of this attack the price has to be the sam
 
 ![Timelock - selling](../../images/compromised-selling.png)
 
-## TLDR
+## Summary
 By discovering some private keys because of a server error, we are able to rig the prices of some NFTs on-chain. Then we buy them cheap and sell them high!

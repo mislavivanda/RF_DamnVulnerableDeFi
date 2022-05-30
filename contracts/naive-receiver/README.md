@@ -1,5 +1,5 @@
 # Naive receiver
-# Description
+## Challenge description
  There's a lending pool offering quite expensive flash loans of Ether, which has 1000 ETH in balance.
 
 You also see that a user has deployed a contract with 10 ETH in balance, capable of interacting with the lending pool and receiveing flash loans of ETH.
@@ -7,7 +7,7 @@ You also see that a user has deployed a contract with 10 ETH in balance, capable
 **Drain all ETH funds from the user's contract.** 
 
 >**Doing it in a single transaction is a big plus ;)**
-# Contracts
+## Contracts
 - `FlashLoanReceiver.sol`: user's contract which interacts with the lending pool contract. Main method is `receiveEther()` which is called from `NaiveReceiverLenderPool.sol` as part of borrower method invocation during flash loan procedure. Inside this method we calculate amount of ETHs we need to repay and check if we can handle it. If we have enough ETHs to repay, empty `_executeActionDuringFlashLoan() internal` method is invoked and flash loan is repaid. 
 
     You have probably noticed `payable` keyword in `receiveEther()` and `receive()` method definitions. Also, `receive()` method is defined but doesn't have any procedures defined inside its body. Reason for using these new concepts is because we are now dealing with **ETH** which is native blockchain cryptocurrency(not **token** like previous cases) and Solidity is designed to support native blockchain cryptocurrency. It provides us with special native methods, keywords and syntax which we need to follow in order to work with ETH transfers. For the purpose of our attack we will explain these 2 important parts:
@@ -26,9 +26,9 @@ You also see that a user has deployed a contract with 10 ETH in balance, capable
     >**Note**: ABI stands for **A**pplication **B**inary **I**nterface and represents a standardized way for interacting with contract methods.
     
 - `AttackerBonusSingleTransaction.sol`: contract with single `drainBorrowerFunds()` method used to achieve bonus points by performing attack inside single transaction. If you ask yourself why do we need to define contract in order to perform attack inside single transaction wait until we reach [**Bonus**](##Bonus) chapter or if you are really curios and can't wait, feel free to check it now.
-# Vulnerability
+## Vulnerability
 Enabling flash loan borrower to specify any contract address on which target method will be invoked is really unusual and suspicious at first glance. Knowing that a flash loan is designed to be a 2 party procedure we notice that in our current case flash loan can include 3 parties - `flashLoan()` method invocator, contract specified inside `borrower` parameter and lending pool contract. In other words, some 3rd EOA/contract can borrow flash loan on behalf of other contract **without its approval**. Using this vulnerability we can request `flashLoan()` on behalf of user's contract and succeed in our mission.
-# Attack
+## Attack
 *How can we utilize possibility to invoke `flashLoan()` method on behalf of user's `FlashLoanReceiver.sol` contract to drain all of its ETHs?* 
 
 Every time flash loan is requested fee of 1 ETH must be added on top of borrowed amount and repaid to lender pool contract. Entity who will pay this 1 ETH is not us, but user's `FlashLoanReceiver.sol` contract. Thus, for every incovation of `flashLoan()` method 1 ETH will be deducted from user's `FlashLoanReceiver.sol` contract balance since contract first receives borrowed amount of ETHs and then repais that same amount increased by 1 ETH. 
@@ -38,13 +38,13 @@ If we invoke `flashLoan()` method **10** times, all 10 ETHs from `FlashLoanRecei
 Before implementation we should consider next question: *Is `borrowAmount` parameter relevant for our attack i.e. do we need to put some specific value or we can put arbitrary one?* 
 
 As we mentioned before, `FlashLoanReceiver.sol` contract receives borrowed amount of ETHs and **„repais that same amount increased by 1 ETH.“** As long as our `borrowAmount` is less or equal than pool balance we can specify arbitrary value. 
-## Basic
+### Basic
 Probably first idea for implementation of previously specified attack plan is to use `for` loop, iterate 10 times and each time invoke `flashLoan()` method on `NaiveReceiverLenderPool.sol` contract with `borrower` set to user's `FlashLoanReceiver.sol` contract and `borrowAmount` to arbitrary value less or equal than lender pool balance. 
 
 To ensure this condition in every state of `NaiveReceiverLenderPool.sol`contract we initialize it to 0 since `flashLoan()` method doesn't check if `borrowAmount` is greater than zero. Implementation of JavaScript code for this basic approach is given on next image:
 
 ![Basic attack JavaScript code](../../images/naive-receiver/naive-receiver1.PNG)
-## Bonus
+### Bonus
 We could ask ourselves: *Why would we want to enhance previous basic procedure? Is it beacuse of less processing power or something else?* 
 
 Nowadays, processing power is usually not a bottleneck, especially when dealing with 10 iterations. Answer lays in number of transactions required to perform basic approach and associated gas fees required for each transaction. 
@@ -72,13 +72,13 @@ In our case, invocation of `drainBorrowerFunds()` method on our `AttackerBonusSi
 `AttackerBonusSingleTransaction.sol` contract code can be viewed on next image:
 
 ![receive() method](../../images/naive-receiver/naive-receiver2.PNG)
-# Summary
-## Basic
+## Summary
+### Basic
 - Create transaction by invoking `flashLoan()` method on lender pool contract with specified `borrower` value to user's contract and `borrowAmount` to 0
 - `flashLoan()` method invokes `receiveEther()` method on user's contract which repais borrowed amount increased by 1 ETH fee - 1 ETH is deducted from user's contract balance
 - Repeat same procedure 9 more times
 - Total: **10** transactions made
-## Bonus
+### Bonus
 - Deploy contract
 - Inside **single** transaction:
     - Invoke `flashLoan()` method on lender pool contract with specified `borrower` value to user's contract and `borrowAmount` to 0

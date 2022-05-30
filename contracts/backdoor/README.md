@@ -55,6 +55,6 @@ In the .js script we just deploy and call the `attack()` function.
 
 ![Backdoor - attack exploit](../../images/backdoor-exploit.png)
 
-## TLDR
+## Summary
 
 By exploiting the gnosis factory wallet creation modules, we are able to drain funds meant for other wallets to collect.

@@ -30,5 +30,5 @@ This enables us to then borrow DVTs for a bargain price.
 
 Some notes to take away from this challenge are that pools with low liquidity are prone to high price deviation and that when using on-chain data sources you should be very careful because they are also prone to manipulation.
 
-## TLDR
+## Summary
 Again we have used the vulnerabilities of on-chain data consumption and low liquidity to manipulate the lending pools' terms on lending.
