@@ -21,7 +21,7 @@ You start with no DVT tokens in balance, and the pool has 1.5 million. Your obje
 
     Since we need to remember our action for later execution we need to save it in our contract memory via `storage` keyword. Also, for every proposed action we generate unique `actionId` as a simple counter increment. `actionId` is returned to participant who proposes action so he can later execute it by providing this identifier. This is enabled by `actions` mapping variable which stores every proposed action in contract memory forever(`storage` keyword).
     
-    In order to execute proposed action we need to satisfy conditions specified in `_canBeExecuted()` method i.e. method can't be executed before(`executedAt` property records this) and at least 2 days must pass between action proposal and execution.
+    In order to execute proposed action we need to satisfy conditions specified in `_canBeExecuted()` method i.e. method can't be executed more than one time(`executedAt` property records this) and at least 2 days must pass between action proposal and execution.
 
 - `DrainSelfiePool.sol`: attacker contract with 3 specified methods. Details about these methods will be covered in [**Attack**](#Attack) chapter.
 ## Vulnerability
@@ -35,7 +35,7 @@ This contract has `snapshot()` method which is wrapper for ERC20 `_snapshot()` m
 
 By using balances at most recent token `snapshot`, while also anyone can perform token `snapshot`, we have same problem with vote manipulation as specified in [**The rewarder**](../../contracts/the-rewarder/README.md) challenge with only difference that in our case we talk about action proposal and not voting. Thus, if attacker can obtain enough DVTs before action proposal he can successfully propose an action. 
 
-Well, at least we are safe in our case since attacker doesn't have any DVTs in balance. ***Are we?*** Checkout it out in [**Attack**](#Attack) chapter.
+Well, at least we are safe in our case since attacker doesn't have any DVTs in balance. ***Are we?*** Check it out in [**Attack**](#Attack) chapter.
 ## Attack
 As previously discussed in [**Vulnerability**](#Vulnerability) chapter, DAO governance specified by `SimpleGovernance.sol` contract has a serious flaw in sense of vote manipulations if attacker can obtain enough voting power = `governanceToken` = DVT. 
 
